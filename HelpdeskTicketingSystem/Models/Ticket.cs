@@ -11,5 +11,10 @@
         public string Severity { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public virtual User CreatedBy { get; set; } = null!;
+        public virtual User? AssignedTo {  get; set; }
+        public virtual Department Department { get; set; } = null!;
+        public virtual ICollection<Remark> Remarks { get; set; } = new List<Remark>();
     }
 }
