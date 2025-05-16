@@ -15,5 +15,6 @@
         public string Status { get; set; } = string.Empty;
         public DateTime CreatedAt {  get; set; }
         
+        public List<RemarkDTO> Remarks {  get; set; } = new List<RemarkDTO>();
     }
 }
