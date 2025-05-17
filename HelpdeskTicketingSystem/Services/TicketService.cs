@@ -460,5 +460,45 @@ namespace HelpdeskApp.Infrastructure.Services
         {
             throw new NotImplementedException();
         }
+
+        Task<IEnumerable<TicketDTO>> ITicketService.getTicketsForUserAsync(int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TicketDTO> ITicketService.getTicketByIDAsync(int ticketID, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TicketDTO> ITicketService.UpdateTicketAsync(int id, TicketUpdateDTO ticketDTO, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TicketDTO> ITicketService.AssignTicketAsync(int ticketID, int assignToUserID, int requestedByUserID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TicketDTO> ITicketService.UpdateTicketStatusAsync(int id, TicketStatus newStatus, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TicketDTO> ITicketService.ChangeTicketDepartmentAsync(int ticketID, int newDepartmentID, int requestedByID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<TicketDTO> ITicketService.getDashboardDataAsync(int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> ITicketService.UserHasAccessToTicketAsync(int ticketID, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
