@@ -116,5 +116,20 @@ namespace HelpdeskTicketingSystem.Services
         {
             throw new NotImplementedException();
         }
+
+        Task<RemarkDTO> IRemarkService.AddRemarkAsync(RemarkDTO remarkDTO, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IRemarkService.DeleteRemarkAsync(int ticketID, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<RemarkDTO>> IRemarkService.GetRemarkByIdAsync(int ticketID, int userID, string? userRole, int departmentID)
+        {
+            throw new NotImplementedException();
+        }
     }
  }

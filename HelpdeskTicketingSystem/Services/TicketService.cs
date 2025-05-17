@@ -446,7 +446,7 @@ namespace HelpdeskApp.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        Task<TicketDTO> ITicketService.AssignTicketAsync(int ticketID, int assignToUserID, int requestedByUserID)
+        Task<TicketDTO> ITicketService.AssignTicketAsync(int ticketID, int assignToUserID, int requestedByUserID, string? userRole, int departmentID)
         {
             throw new NotImplementedException();
         }
@@ -456,7 +456,7 @@ namespace HelpdeskApp.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        Task<TicketDTO> ITicketService.ChangeTicketDepartmentAsync(int ticketID, int newDepartmentID, int requestedByID)
+        Task<TicketDTO> ITicketService.ChangeTicketDepartmentAsync(int ticketID, int newDepartmentID, int requestedByID, string? userRole, int departmentID)
         {
             throw new NotImplementedException();
         }
@@ -476,17 +476,7 @@ namespace HelpdeskApp.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        Task<TicketDTO> ITicketService.AssignTicketAsync(int ticketID, int assignToUserID, int requestedByUserID, string? userRole, int departmentID)
-        {
-            throw new NotImplementedException();
-        }
-
         Task<TicketDTO> ITicketService.UpdateTicketStatusAsync(int id, TicketStatus newStatus, int userID, string? userRole, int departmentID)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<TicketDTO> ITicketService.ChangeTicketDepartmentAsync(int ticketID, int newDepartmentID, int requestedByID, string? userRole, int departmentID)
         {
             throw new NotImplementedException();
         }
