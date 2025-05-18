@@ -4,6 +4,7 @@ using HelpdeskApp.Infrastructure.Services;
 using HelpdeskTicketingSystem.API.Middleware;
 using HelpdeskTicketingSystem.Data;
 using HelpdeskTicketingSystem.Interfaces;
+using HelpdeskTicketingSystem.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +37,8 @@ namespace HelpdeskTicketingSystem
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
+            builder.Services.AddScoped<IDepartmentServices, DepartmentService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
