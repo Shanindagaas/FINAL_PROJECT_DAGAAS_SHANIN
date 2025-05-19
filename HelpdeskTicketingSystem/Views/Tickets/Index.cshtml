@@ -1,0 +1,315 @@
+﻿@model IEnumerable<HelpdeskTicketingSystem.DTOs.TicketDTO>
+@using HelpdeskTicketingSystem.Enums
+@{
+    ViewData["Title"] = "Tickets";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h4 class="mb-0">Tickets</h4>
+            </div>
+            <div class="col-auto">
+                <a href="@Url.Action("Create", "Tickets")" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Create New Ticket
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <form id="filterForm" method="get" action="@Url.Action("Index", "Tickets")">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="searchTerm" class="form-label">Search</label>
+                            <input type="text" id="searchTerm" name="searchTerm" class="form-control" value="@ViewBag.CurrentFilter?.SearchTerm" placeholder="Search by title or description...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="status" class="form-label">Status</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                @foreach (var status in Enum.GetValues(typeof(TicketStatus)))
+                                {
+                                    <option value="@status" selected="@(ViewBag.CurrentFilter?.Status == status.ToString())">@status</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="severity" class="form-label">Severity</label>
+                            <select id="severity" name="severity" class="form-select">
+                                <option value="">All Severities</option>
+                                @foreach (var severity in Enum.GetValues(typeof(SeverityLevel)))
+                                {
+                                    <option value="@severity" selected="@(ViewBag.CurrentFilter?.Severity == severity.ToString())">@severity</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="departmentId" class="form-label">Department</label>
+                            <select id="departmentId" name="departmentId" class="form-select">
+                                <option value="">All Departments</option>
+                                @foreach (var department in ViewBag.Departments)
+                                {
+                                    <option value="@department.Value" selected="@(ViewBag.CurrentFilter?.DepartmentId == int.Parse(department.Value))">@department.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <div class="d-flex gap-2 w-100">
+                                <button type="submit" class="btn btn-primary flex-grow-1">
+                                    <i class="fas fa-filter me-1"></i> Filter
+                                </button>
+                                <a href="@Url.Action("Index", "Tickets")" class="btn btn-secondary flex-grow-1">
+                                    <i class="fas fa-redo me-1"></i> Reset
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="@Url.Action("Index", "Tickets", new { sortOrder = ViewBag.IdSortParam, currentFilter = ViewBag.CurrentFilterJson })">
+                                #ID
+                                @if (ViewBag.CurrentSort == "id_asc")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (ViewBag.CurrentSort == "id_desc")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-sort"></i>
+                                }
+                            </a>
+                        </th>
+                        <th>
+                            <a href="@Url.Action("Index", "Tickets", new { sortOrder = ViewBag.TitleSortParam, currentFilter = ViewBag.CurrentFilterJson })">
+                                Title
+                                @if (ViewBag.CurrentSort == "title_asc")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (ViewBag.CurrentSort == "title_desc")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-sort"></i>
+                                }
+                            </a>
+                        </th>
+                        <th>Department</th>
+                        <th>Assigned To</th>
+                        <th>
+                            <a href="@Url.Action("Index", "Tickets", new { sortOrder = ViewBag.StatusSortParam, currentFilter = ViewBag.CurrentFilterJson })">
+                                Status
+                                @if (ViewBag.CurrentSort == "status_asc")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (ViewBag.CurrentSort == "status_desc")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-sort"></i>
+                                }
+                            </a>
+                        </th>
+                        <th>
+                            <a href="@Url.Action("Index", "Tickets", new { sortOrder = ViewBag.SeveritySortParam, currentFilter = ViewBag.CurrentFilterJson })">
+                                Severity
+                                @if (ViewBag.CurrentSort == "severity_asc")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (ViewBag.CurrentSort == "severity_desc")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-sort"></i>
+                                }
+                            </a>
+                        </th>
+                        <th>
+                            <a href="@Url.Action("Index", "Tickets", new { sortOrder = ViewBag.DateSortParam, currentFilter = ViewBag.CurrentFilterJson })">
+                                Created Date
+                                @if (ViewBag.CurrentSort == "date_asc")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (ViewBag.CurrentSort == "date_desc")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-sort"></i>
+                                }
+                            </a>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>#@item.Id</td>
+                            <td>@item.Title</td>
+                            <td>@item.DepartmentName</td>
+                            <td>
+                                @if (item.AssignedToName != null)
+                                {
+                                    <span>@item.AssignedToName</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Unassigned</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="badge bg-@GetStatusClass(item.Status.ToString())">@item.Status</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-@GetSeverityClass(item.Severity.ToString())">@item.Severity</span>
+                            </td>
+                            <td>@item.CreatedAt.ToString("MMM dd, yyyy HH:mm")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("Details", "Tickets", new { id = item.Id })" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="@Url.Action("Edit", "Tickets", new { id = item.Id })" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    @if (User.IsInRole(UserRole.Admin.ToString()) || User.IsInRole(UserRole.Supervisor.ToString()))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal@(item.Id)" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    }
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal@(item.Id)" tabindex="-1" aria-labelledby="deleteModalLabel@(item.Id)" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel@(item.Id)">Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete ticket #@item.Id - @item.Title?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form asp-action="Delete" asp-route-id="@item.Id" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-search fa-3x mb-3"></i>
+                                    <p>No tickets found matching your search criteria</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                @{
+                    var prevDisabled = !ViewBag.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !ViewBag.HasNextPage ? "disabled" : "";
+                }
+                <li class="page-item @prevDisabled">
+                    <a class="page-link" href="@Url.Action("Index", "Tickets", new { page = ViewBag.PageIndex - 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilterJson })" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.PageIndex ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index", "Tickets", new { page = i, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilterJson })">@i</a>
+                    </li>
+                }
+                
+                <li class="page-item @nextDisabled">
+                    <a class="page-link" href="@Url.Action("Index", "Tickets", new { page = ViewBag.PageIndex + 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilterJson })" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="text-center text-muted">
+            Showing @ViewBag.StartItem - @ViewBag.EndItem of @ViewBag.TotalItems tickets
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}
+
+@functions {
+    public string GetStatusClass(string status)
+    {
+        return status switch
+        {
+            "New" => "warning",
+            "Open" => "primary",
+            "InProgress" => "info",
+            "OnHold" => "secondary",
+            "Resolved" => "success",
+            "Closed" => "dark",
+            _ => "light"
+        };
+    }
+
+    public string GetSeverityClass(string severity)
+    {
+        return severity switch
+        {
+            "Low" => "success",
+            "Medium" => "warning",
+            "High" => "danger",
+            "Critical" => "danger",
+            _ => "secondary"
+        };
+    }
+}

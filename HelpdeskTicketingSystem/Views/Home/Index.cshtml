@@ -1,8 +1,55 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to Helpdesk";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="jumbotron bg-light p-5 rounded">
+        <h1 class="display-4">Welcome to the Helpdesk Ticketing System</h1>
+        <p class="lead">A streamlined solution for managing support requests and issues.</p>
+        <hr class="my-4">
+        <p>Log in to create, manage, and track support tickets across your organization.</p>
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="d-flex gap-3 mt-4">
+                <a asp-controller="Auth" asp-action="Login" class="btn btn-primary">Log In</a>
+                <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-secondary">Register</a>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex gap-3 mt-4">
+                <a asp-controller="Home" asp-action="Dashboard" class="btn btn-primary">Go to Dashboard</a>
+                <a asp-controller="Tickets" asp-action="Create" class="btn btn-success">Create New Ticket</a>
+            </div>
+        }
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-ticket-alt me-2"></i>Create Tickets</h5>
+                    <p class="card-text">Submit and track issues with detailed descriptions and severity levels.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-comments me-2"></i>Collaborative Remarks</h5>
+                    <p class="card-text">Communicate directly on tickets with collaborative remarks and updates.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-chart-line me-2"></i>Status Tracking</h5>
+                    <p class="card-text">Monitor ticket progress with real-time status updates and notifications.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

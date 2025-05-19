@@ -1,0 +1,47 @@
+﻿@using HelpdeskTicketingSystem.Enums
+
+<div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="sidebar-heading">Helpdesk System</div>
+    <div class="list-group list-group-flush">
+        <a href="@Url.Action("Dashboard", "Home")" class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["action"].ToString() == "Dashboard" ? "active" : "")">
+            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+        </a>
+
+        <a href="@Url.Action("Index", "Tickets")" class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["controller"].ToString() == "Tickets" ? "active" : "")">
+            <i class="fas fa-ticket-alt me-2"></i> Tickets
+        </a>
+
+        @if (User.IsInRole(UserRole.Admin.ToString()) || User.IsInRole(UserRole.Supervisor.ToString()))
+        {
+            <a href="@Url.Action("Reports", "Home")" class="list-group-item list-group-item-action @(ViewContext.RouteData.Values["action"].ToString() == "Reports" ? "active" : "")">
+                <i class="fas fa-chart-bar me-2"></i> Reports
+            </a>
+        }
+
+        @if (User.IsInRole(UserRole.Admin.ToString()))
+        {
+            <div class="accordion" id="adminMenuAccordion">
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header" id="adminMenuHeader">
+                        <button class="accordion-button collapsed list-group-item list-group-item-action" type="button" data-bs-toggle="collapse" data-bs-target="#adminMenuCollapse" aria-expanded="false" aria-controls="adminMenuCollapse">
+                            <i class="fas fa-cogs me-2"></i> Administration
+                        </button>
+                    </h2>
+                    <div id="adminMenuCollapse" class="accordion-collapse collapse" aria-labelledby="adminMenuHeader" data-bs-parent="#adminMenuAccordion">
+                        <div class="accordion-body p-0">
+                            <a href="@Url.Action("Index", "Users")" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-users me-2"></i> Users
+                            </a>
+                            <a href="@Url.Action("Index", "Departments")" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-building me-2"></i> Departments
+                            </a>
+                            <a href="@Url.Action("Settings", "Home")" class="list-group-item list-group-item-action ps-4">
+                                <i class="fas fa-sliders-h me-2"></i> Settings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
