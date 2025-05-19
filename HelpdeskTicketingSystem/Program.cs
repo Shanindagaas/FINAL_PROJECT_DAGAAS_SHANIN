@@ -65,7 +65,7 @@ namespace HelpdeskTicketingSystem
 
             var app = builder.Build();
 
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
@@ -76,14 +76,12 @@ namespace HelpdeskTicketingSystem
                     await DbInitializer.Initialize(dbContext);
                 }
             }
-
+            
             app.UseHttpsRedirection();
             app.UseCors("AllowSpecificOrigin");
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseRoleAuthorization();
-            app.UseAuthentication();
-
             app.MapControllers();
 
             app.Run();
