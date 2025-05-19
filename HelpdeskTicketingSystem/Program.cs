@@ -18,7 +18,7 @@ namespace HelpdeskTicketingSystem
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllersWithViews();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -33,12 +33,13 @@ namespace HelpdeskTicketingSystem
             });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITicketService, TicketService>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRemarkService, RemarkService>();
 
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
@@ -52,7 +53,7 @@ namespace HelpdeskTicketingSystem
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -67,8 +68,12 @@ namespace HelpdeskTicketingSystem
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Helpdesk API V1");
+                });
 
                 using (var scope = app.Services.CreateScope())
                 {
@@ -76,13 +81,24 @@ namespace HelpdeskTicketingSystem
                     await DbInitializer.Initialize(dbContext);
                 }
             }
-            
-            app.UseHttpsRedirection();
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
+
+            app.UseStaticFiles();
             app.UseCors("AllowSpecificOrigin");
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseRoleAuthorization();
+
             app.MapControllers();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}"
+               );
 
             app.Run();
         }

@@ -2,7 +2,7 @@ using System.Diagnostics;
 using HelpdeskTicketingSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HelpdeskTicketingSystem.API.Controllers
+namespace HelpdeskTicketingSystem.Controllers
 {
     public class HomeController : Controller
     {
