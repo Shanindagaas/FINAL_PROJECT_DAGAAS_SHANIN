@@ -52,6 +52,7 @@ namespace HelpdeskApp.API.Controllers
                 var departmentId = int.Parse(User.FindFirst("departmentId")?.Value);
 
                 remarkDto.UserID = userId;
+                remarkDto.UserRole = userRole ?? string.Empty;
 
                 var remark = await _remarkService.AddRemarkAsync(remarkDto, userId, userRole, departmentId);
                 return CreatedAtAction(nameof(GetRemarksByTicketId), new { ticketId = remarkDto.TicketID }, remark);

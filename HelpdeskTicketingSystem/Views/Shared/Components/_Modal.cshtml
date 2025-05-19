@@ -1,4 +1,4 @@
-﻿@model (string Id, string Title, RenderFragment Body, RenderFragment Footer)
+﻿@model ModalViewModel
 
 <div class="modal fade" id="@Model.Id" tabindex="-1" aria-labelledby="@(Model.Id)Label" aria-hidden="true">
     <div class="modal-dialog">
@@ -8,10 +8,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @Model.Body
+                @Html.Raw(Model.Body)
             </div>
             <div class="modal-footer">
-                @Model.Footer
+                @Html.Raw(Model.Footer)
             </div>
         </div>
     </div>

@@ -75,9 +75,14 @@ namespace HelpdeskApp.API.Controllers
                 ticketDto.CreatedBy = userId;
 
                 // If department not specified, use user's department
-                if (ticketDto.DepartmentID <= 0)
+                if (ticketDto.DepartmentId <= 0)
                 {
-                    ticketDto.DepartmentID = userDepartmentId;
+                    ticketDto.DepartmentId = userDepartmentId;
+                }
+
+                if (string.IsNullOrEmpty(ticketDto.Status))
+                {
+                    ticketDto.Status = TicketStatus.Open.ToString();
                 }
 
                 var ticket = await _ticketService.CreateTicketAsync(ticketDto, userId);

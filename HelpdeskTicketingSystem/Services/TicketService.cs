@@ -106,9 +106,12 @@ namespace HelpdeskApp.Infrastructure.Services
                 Title = ticketDto.Title,
                 Description = ticketDto.Description,
                 CreatedById = createdById,
-                DepartmentId = ticketDto.DepartmentID,
+                DepartmentId = ticketDto.DepartmentId,
+                AssignedToId = ticketDto.AssignedToId,
                 Severity = ticketDto.Severity,
-                Status = TicketStatus.Open.ToString(),
+                Status = !string.IsNullOrEmpty(ticketDto.Status)
+                    ? ticketDto.Status
+                    : TicketStatus.Open.ToString(),
                 CreatedAt = DateTime.UtcNow
             };
             _context.Tickets.Add(ticket);
@@ -430,6 +433,7 @@ namespace HelpdeskApp.Infrastructure.Services
                     TicketID = r.TicketId,
                     UserID = r.UserId,
                     UserName = r.User?.Name ?? "Unknown",
+                    UserRole = r.User?.Role ?? string.Empty,
                     Content = r.Content,
                     CreatedAt = r.CreatedAt
                 }).ToList() ?? new List<RemarkDTO>()

@@ -56,6 +56,8 @@ namespace HelpdeskTicketingSystem.Services
                 Id = remark.Id,
                 TicketID = remark.TicketId,
                 UserID = remark.UserId,
+                UserName = user?.Name ?? "Unknown",
+                UserRole = user?.Role ?? string.Empty,
                 Content = remark.Content,
                 CreatedAt = remark.CreatedAt
             };
@@ -107,6 +109,7 @@ namespace HelpdeskTicketingSystem.Services
                 TicketID = r.TicketId,
                 UserID = r.UserId,
                 UserName = r.User?.Name ?? "Unknown",
+                UserRole = r.User?.Role ?? string.Empty,
                 Content = r.Content,
                 CreatedAt = r.CreatedAt
             });
