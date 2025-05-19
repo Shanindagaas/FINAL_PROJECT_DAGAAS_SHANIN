@@ -5,6 +5,8 @@
         Open,
         InProgress,
         Resolved,
-        Closed
+        Closed,
+        New,
+        OnHold
     }
 }

@@ -1,0 +1,28 @@
+﻿@model string
+@using HelpdeskTicketingSystem.Enums
+@{
+    var (badgeClass, icon) = GetStatusBadgeDetails(Model);
+}
+<span class="badge @badgeClass">
+    <i class="@icon me-1"></i> @Model
+</span>
+@functions {
+    private (string badgeClass, string icon) GetStatusBadgeDetails(string statusStr)
+    {
+        if (Enum.TryParse<TicketStatus>(statusStr, out var status))
+        {
+            return status switch
+            {
+                TicketStatus.New => ("bg-info", "fas fa-plus-circle"),
+                TicketStatus.Open => ("bg-primary", "fas fa-folder-open"),
+                TicketStatus.InProgress => ("bg-warning text-dark", "fas fa-spinner"),
+                TicketStatus.OnHold => ("bg-secondary", "fas fa-pause-circle"),
+                TicketStatus.Resolved => ("bg-success", "fas fa-check-circle"),
+                TicketStatus.Closed => ("bg-dark", "fas fa-times-circle"),
+                _ => ("bg-light text-dark", "fas fa-question-circle")
+            };
+        }
+
+        return ("bg-light text-dark", "fas fa-question-circle");
+    }
+}

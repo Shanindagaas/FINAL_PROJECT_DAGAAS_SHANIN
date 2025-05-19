@@ -1,0 +1,75 @@
+﻿@model HelpdeskTicketingSystem.DTOs.TicketCreateDTO
+@using HelpdeskTicketingSystem.Enums
+
+<form asp-action="@(ViewContext.RouteData.Values["action"].ToString())" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @if (ViewContext.RouteData.Values["action"].ToString() == "Edit")
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" placeholder="Enter ticket title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="5" placeholder="Describe the issue in detail"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="DepartmentId" class="form-label">Department</label>
+            <select asp-for="DepartmentId" id="departmentId" class="form-select"
+                    asp-items="@ViewBag.Departments">
+                <option value="">-- Select Department --</option>
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label asp-for="Severity" class="form-label">Severity Level</label>
+            <select asp-for="Severity" class="form-select"
+                    asp-items="Html.GetEnumSelectList<SeverityLevel>()">
+                <option value="">-- Select Severity --</option>
+            </select>
+            <span asp-validation-for="Severity" class="text-danger"></span>
+        </div>
+    </div>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Supervisor"))
+    {
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="AssignedToId" class="form-label">Assign To</label>
+                <select asp-for="AssignedToId" class="form-select"
+                        asp-items="@ViewBag.Users">
+                    <option value="">-- Unassigned --</option>
+                </select>
+                <span asp-validation-for="AssignedToId" class="text-danger"></span>
+            </div>
+
+            @if (ViewContext.RouteData.Values["action"].ToString() == "Edit")
+            {
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Status" class="form-label">Status</label>
+                    <select asp-for="Status" class="form-select"
+                            asp-items="Html.GetEnumSelectList<TicketStatus>()">
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="text-end mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+            @(ViewContext.RouteData.Values["action"].ToString() == "Edit" ? "Update" : "Create") Ticket
+        </button>
+    </div>
+</form>

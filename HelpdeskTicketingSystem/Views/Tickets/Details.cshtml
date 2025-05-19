@@ -1,0 +1,125 @@
+﻿@model HelpdeskTicketingSystem.DTOs.TicketDTO
+@using HelpdeskTicketingSystem.Enums
+@using HelpdeskTicketingSystem.DTOs
+@{
+    ViewData["Title"] = "Ticket Details";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Tickets" asp-action="Index">Tickets</a></li>
+            <li class="breadcrumb-item active">Ticket #@Model.Id</li>
+        </ol>
+    </nav>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                Ticket #@Model.Id: @Model.Title
+            </h4>
+            <div>
+                @if (User.IsInRole("Admin") || User.IsInRole("Supervisor") ||
+                (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.CreatedById.ToString()))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-light me-2">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                }
+                <a asp-action="Index" class="btn btn-sm btn-light">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="card-title">@Model.Title</h5>
+                    <div class="mb-4 mt-3">
+                        <h6 class="fw-bold">Description</h6>
+                        <p class="card-text">@Model.Description</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-3 text-muted">Ticket Information</h6>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Status:</span>
+                                <partial name="Components/_StatusIndicator" model="@Model.Status" />
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Severity:</span>
+                                <span class="badge @(GetSeverityBadgeClass((SeverityLevel)Enum.Parse(typeof(SeverityLevel), Model.Severity.ToString()))))">
+                                    @Model.Severity
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Department:</span>
+                                <span>@Model.DepartmentName</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Created By:</span>
+                                <span>@Model.CreatedByName</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Created On:</span>
+                                <span>@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Assigned To:</span>
+                                <span>@(string.IsNullOrEmpty(Model.AssignedToName) ? "Unassigned" : Model.AssignedToName)</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Last Updated:</span>
+                                <span>@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Remarks & Updates</h5>
+        </div>
+        <div class="card-body">
+            <partial name="Remarks/_RemarksList" model="@Model.Remarks" />
+
+            <hr class="my-4">
+
+            <h6 class="mb-3">Add New Remark</h6>
+            <partial name="Remarks/_CreateRemark" model="new RemarkDTO { TicketID = Model.Id }" />
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string GetSeverityBadgeClass(SeverityLevel severity)
+    {
+        return severity switch
+        {
+            SeverityLevel.Low => "bg-success",
+            SeverityLevel.Medium => "bg-warning text-dark",
+            SeverityLevel.High => "bg-danger",
+            SeverityLevel.Critical => "bg-dark",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,6 @@
+﻿@model (string Message, string Type)
+
+<div class="alert alert-@Model.Type alert-dismissible fade show" role="alert">
+    @Model.Message
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>

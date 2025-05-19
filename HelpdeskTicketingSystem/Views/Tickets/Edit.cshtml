@@ -1,0 +1,38 @@
+﻿@model HelpdeskTicketingSystem.DTOs.TicketUpdateDTO
+@{
+    ViewData["Title"] = "Edit Ticket";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Tickets" asp-action="Index">Tickets</a></li>
+            <li class="breadcrumb-item active">Edit Ticket #@Model.Id</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Edit Ticket #@Model.Id</h4>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-sm btn-light">View Details</a>
+        </div>
+        <div class="card-body">
+            <partial name="_TicketForm" model="Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            // Initialize any needed plugins for the edit form
+            $('#departmentId').select2({
+                placeholder: "Select a department",
+                allowClear: true
+            });
+        });
+    </script>
+}

@@ -1,0 +1,28 @@
+﻿@model HelpdeskTicketingSystem.DTOs.TicketCreateDTO
+@{
+    ViewData["Title"] = "Create Ticket";
+    Layout = "_Layout";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Create New Ticket</h4>
+        </div>
+        <div class="card-body">
+            <partial name="_TicketForm" model="Model" />
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            $('#departmentId').select2({
+                placeholder: "Select a department",
+                allowClear: true
+            });
+        });
+    </script>
+}
